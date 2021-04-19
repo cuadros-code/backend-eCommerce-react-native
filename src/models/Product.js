@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 
+
 const ProductSchema = new Schema({
   name: {
     type: String,
@@ -38,6 +39,10 @@ const ProductSchema = new Schema({
     max: 200
   },
   rating: {
+    type: Number,
+    default: 0
+  },
+  numReviews: {
     type: Number,
     default: 0
   },
