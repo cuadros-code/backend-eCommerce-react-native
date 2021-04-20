@@ -10,9 +10,10 @@ const {
   productFeatured } = require('../controllers/productController')
 
 router.get(`/`, getAllProducts)
+router.get(`/:id`, getProductById)
 router.get(`/get/count`, countProducts)
 router.get(`/get/featured/:count`, productFeatured)
-router.get(`/:id`, getProductById)
+
 router.post(`/`, createProduct)
 router.put(`/:id`, updateProduct)
 router.delete(`/:id`, deleteProduct)
