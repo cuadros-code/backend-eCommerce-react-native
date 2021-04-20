@@ -59,4 +59,12 @@ const ProductSchema = new Schema({
   timestamps: true,
 })
 
+ProductSchema.method('toJSON', function () {
+  const { _id, ...object } = this.toObject()
+  return {
+    id: _id,
+    ...object
+  }
+})
+
 module.exports = model('Product', ProductSchema)

@@ -10,4 +10,12 @@ const UserSchema = new Schema({
   timestamps: true,
 })
 
+UserSchema.method('toJSON', function () {
+  const { _id, ...object } = this.toObject()
+  return {
+    id: _id,
+    ...object
+  }
+})
+
 module.exports = model('User', UserSchema)
