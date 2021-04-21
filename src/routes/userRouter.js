@@ -5,12 +5,14 @@ const {
   getUsers,
   getUserById,
   loginUser } = require('../controllers/userController')
-
-router.get(`/`, getUsers)
-router.get(`/:id`, getUserById)
+const authValidate = require('../middleware/authValidate')
 
 router.post(`/`, createUser)
 router.post(`/login`, loginUser)
+
+router.use(authValidate)
+router.get(`/`, getUsers)
+router.get(`/:id`, getUserById)
 
 
 module.exports = router

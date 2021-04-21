@@ -8,7 +8,9 @@ const {
   deleteProduct,
   countProducts,
   productFeatured } = require('../controllers/productController')
+const authValidate = require('../middleware/authValidate')
 
+router.use(authValidate)
 router.get(`/`, getAllProducts)
 router.get(`/:id`, getProductById)
 router.get(`/get/count`, countProducts)
