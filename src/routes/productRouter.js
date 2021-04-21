@@ -9,13 +9,18 @@ const {
   countProducts,
   productFeatured } = require('../controllers/productController')
 const authValidate = require('../middleware/authValidate')
+const validateAdmin = require('../middleware/validateAdmin')
 
-router.use(authValidate)
 router.get(`/`, getAllProducts)
 router.get(`/:id`, getProductById)
 router.get(`/get/count`, countProducts)
 router.get(`/get/featured/:count`, productFeatured)
 
+// valida que token sea valido
+router.use(authValidate)
+
+// valida que sea Administrador
+router.use(validateAdmin)
 router.post(`/`, createProduct)
 router.put(`/:id`, updateProduct)
 router.delete(`/:id`, deleteProduct)

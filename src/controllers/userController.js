@@ -35,6 +35,24 @@ const createUser = async (req = request, res = response) => {
   }
 }
 
+const countUsers = async (req, res = response) => {
+  try {
+
+    const userCount = await User.countDocuments()
+
+    res.json({
+      ok: true,
+      numberUsers: userCount
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      msg: 'Error al obtener usuarios'
+    })
+  }
+}
+
 const getUsers = async (req, res = response) => {
   try {
 
@@ -115,7 +133,8 @@ const loginUser = async (req = request, res = response) => {
 
     const payload = {
       user_id: user.id,
-      user_name: user.name
+      user_name: user.name,
+      isAdmin: user.isAdmin
     }
 
     const token = jwt.sign(
@@ -137,6 +156,33 @@ const loginUser = async (req = request, res = response) => {
   }
 }
 
+const deleteUser = async (req = request, res = response) => {
+  try {
+
+    const idUser = req?.params?.id
+
+    const user = await User.findByIdAndDelete(idUser)
+
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'El usuario no existe'
+      })
+    }
+
+    res.json({
+      ok: true,
+      user: user.id
+    })
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      msg: 'Error al eliminar usuario'
+    })
+  }
+}
+
+
 
 
 
@@ -144,5 +190,7 @@ module.exports = {
   createUser,
   getUsers,
   getUserById,
-  loginUser
+  loginUser,
+  countUsers,
+  deleteUser,
 }
