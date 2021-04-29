@@ -17,7 +17,8 @@ const getAllCategories = async (req = request, res = response) => {
   } catch (error) {
     res.status(404).json({
       ok: false,
-      msg: 'Error al obtener categorias'
+      msg: 'Error al obtener categorias',
+      error
     })
   }
 }
@@ -41,7 +42,8 @@ const getCategoryById = async (req = request, res = response) => {
   } catch (error) {
     res.status(404).json({
       ok: false,
-      msg: 'Error al obtener categoria'
+      msg: 'Error al obtener categoria',
+      error
     })
   }
 }
@@ -63,7 +65,8 @@ const createCategory = async (req = request, res = response) => {
   } catch (error) {
     res.status(404).json({
       ok: false,
-      msg: 'Error al crear categoria'
+      msg: 'Error al crear categoria',
+      error
     })
   }
 }
@@ -86,11 +89,11 @@ const updateCategory = async (req = request, res = response) => {
       category
     })
 
-
   } catch (error) {
     re.status(404).json({
       ok: false,
-      msg: 'Error al actualizar categoria'
+      msg: 'Error al actualizar categoria',
+      error
     })
   }
 }
@@ -120,7 +123,8 @@ const deleteCategory = async (req = request, res = response) => {
   } catch (error) {
     res.status(404).json({
       ok: false,
-      msg: 'Error al eliminar la categoria'
+      msg: 'Error al eliminar la categoria',
+      error
     })
   }
 }

@@ -19,7 +19,8 @@ app.use(`${api}/categories`, require('./src/routes/categoryRouter'))
 
 mongoose.connect(process.env.CONNECTION_URL, {
   useUnifiedTopology: true,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useCreateIndex: true
 })
   .then(() => console.log('db is ok'))
   .catch((err) => console.log('error in DB', err))
