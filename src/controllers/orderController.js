@@ -200,11 +200,45 @@ const getTotalSales = async (req, res = response) => {
   }
 }
 
+const getOrdersByUser = async (req = request, res = response) => {
+  try {
+    const idUser = req.params.userid
+    const orderList = await Order.find({ user: idUser })
+      .populate('user', 'name email phone, _id, isAdmin')
+      .populate({
+        path: 'orderItems',
+        populate: 'product'
+      })
+      .sort({ 'dateOrdered': -1 })
+
+    if (!orderList) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'El usuario no tiene ordenes'
+      })
+    }
+
+    res.json({
+      ok: true,
+      orderList
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      msg: 'Error al consultar ordenes',
+      error
+    })
+  }
+}
+
+
 module.exports = {
   getOrders,
   createOrder,
   deleteOrder,
   getOrderById,
-  updateStatusOrder,
   getTotalSales,
+  getOrdersByUser,
+  updateStatusOrder,
 }

@@ -101,6 +101,17 @@ const createProduct = async (req = request, res = response) => {
   try {
     const data = req?.body
 
+    const file = req.file
+    if (!file) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'La Imagen es requerida'
+      })
+    }
+
+    const fileName = req.file.filename
+    const basePath = `${req.protocol}://${req.get('host')}/src/public/files`
+
     const category = await Category.findById(req.body.category)
     if (!category) {
       return res.status(400).json({
@@ -110,6 +121,7 @@ const createProduct = async (req = request, res = response) => {
     }
 
     const product = new Product(data)
+    product.image = `${basePath}${fileName}`
     const newProduct = await product.save()
     if (!newProduct) {
       return res.status(404).json({
