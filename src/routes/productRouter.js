@@ -8,7 +8,8 @@ const {
   updateProduct,
   deleteProduct,
   countProducts,
-  productFeatured } = require('../controllers/productController')
+  productFeatured,
+  updateGalleryImagesProduct, } = require('../controllers/productController')
 const authValidate = require('../middleware/authValidate')
 const validateAdmin = require('../middleware/validateAdmin')
 
@@ -48,7 +49,8 @@ router.use(authValidate)
 // valida que sea Administrador
 router.use(validateAdmin)
 router.post(`/`, uploadOptions.single('image'), createProduct)
-router.put(`/:id`, updateProduct)
+router.put(`/:id`, uploadOptions.single('image'), updateProduct)
+router.put(`/gallery-images/:id`, uploadOptions.array('images', 5), updateGalleryImagesProduct)
 router.delete(`/:id`, deleteProduct)
 
 

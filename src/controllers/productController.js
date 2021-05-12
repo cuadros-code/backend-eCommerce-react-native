@@ -110,7 +110,7 @@ const createProduct = async (req = request, res = response) => {
     }
 
     const fileName = req.file.filename
-    const basePath = `${req.protocol}://${req.get('host')}/src/public/files`
+    const basePath = `${req.protocol}://${req.get('host')}/src/public/files/`
 
     const category = await Category.findById(req.body.category)
     if (!category) {
@@ -146,6 +146,16 @@ const createProduct = async (req = request, res = response) => {
 const updateProduct = async (req = request, res = response) => {
   try {
     const id = req.params.id
+
+
+    const product = await Product.findById(id)
+    if (!product) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'El producto no esta registrado'
+      })
+    }
+
     const category = await Category.findById(req.body.category)
     if (!category) {
       return res.status(400).json({
@@ -154,7 +164,68 @@ const updateProduct = async (req = request, res = response) => {
       })
     }
 
-    const productUpdated = await Product.findByIdAndUpdate(id, req?.body, { new: true })
+    const file = req.file
+    let imagePath
+
+    if (file) {
+      const fileName = req.file.filename
+      const basePath = `${req.protocol}://${req.get('host')}/src/public/files/`
+      imagePath = `${basePath}${fileName}`
+    } else {
+      imagePath = product.image
+    }
+
+    const productUpdated = await Product.findByIdAndUpdate(
+      id,
+      { ...req?.body, image: imagePath },
+      { new: true })
+
+    if (!productUpdated) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'El producto no pudo ser actualizado'
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+      product: productUpdated
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      msg: 'Error al actualizar el producto'
+    })
+  }
+}
+
+const updateGalleryImagesProduct = async (req = request, res = response) => {
+  try {
+    const id = req.params.id
+    const product = await Product.findById(id)
+    if (!product) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'El producto no esta registrado'
+      })
+    }
+
+    const files = req.files
+    let imagePath = []
+    const basePath = `${req.protocol}://${req.get('host')}/src/public/files/`
+
+    if (files) {
+      files.map(file => {
+        console.log(file);
+        imagePath.push(`${basePath}${file.filename}`)
+      })
+    }
+    const productUpdated = await Product.findByIdAndUpdate(
+      id,
+      { images: imagePath },
+      { new: true })
+
     if (!productUpdated) {
       return res.status(404).json({
         ok: false,
@@ -213,5 +284,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   countProducts,
-  productFeatured
+  productFeatured,
+  updateGalleryImagesProduct,
 }

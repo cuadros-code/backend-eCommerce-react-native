@@ -10,6 +10,7 @@ const api = process.env.API_URL
 app.use(express.json())
 app.use(cors())
 app.use(morgan('tiny'))
+app.use('/src/public/files', express.static(__dirname + '/src/public/files'))
 
 
 app.use(`${api}/users`, require('./src/routes/userRouter'))
